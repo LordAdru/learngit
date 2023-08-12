@@ -1,0 +1,147 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\USER> mongo --version
+MongoDB shell version v5.0.9
+Build Info: {
+    "version": "5.0.9",
+    "gitVersion": "6f7dae919422dcd7f4892c10ff20cdc721ad00e6",
+    "modules": [],
+    "allocator": "tcmalloc",
+    "environment": {
+        "distmod": "windows",
+        "distarch": "x86_64",
+        "target_arch": "x86_64"
+    }
+}
+PS C:\Users\USER> mongod --version
+db version v5.0.9
+Build Info: {
+    "version": "5.0.9",
+    "gitVersion": "6f7dae919422dcd7f4892c10ff20cdc721ad00e6",
+    "modules": [],
+    "allocator": "tcmalloc",
+    "environment": {
+        "distmod": "windows",
+        "distarch": "x86_64",
+        "target_arch": "x86_64"
+    }
+}
+PS C:\Users\USER> mongo
+MongoDB shell version v5.0.9
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("c1124d72-3cba-48cc-b9c3-6582a216021d") }
+MongoDB server version: 5.0.9
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2022-07-19T08:02:30.042+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> show db
+uncaught exception: Error: don't know how to show [db] :
+shellHelper.show@src/mongo/shell/utils.js:1211:11
+shellHelper@src/mongo/shell/utils.js:838:15
+@(shellhelp2):1:1
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+> use shopDB
+switched to db shopDB
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+> db
+shopDB
+> db.products.insertOne({_id: 1, name: "pen", price: 1.20})
+{ "acknowledged" : true, "insertedId" : 1 }
+> show collections
+products
+> db
+shopDB
+> db.products.insertTwo({_id: 2, name: "pencil", price: 12})
+uncaught exception: TypeError: db.products.insertTwo is not a function :
+@(shell):1:1
+> db.products.insertOne({_id: 2, name: "pencil", price: 12})
+{ "acknowledged" : true, "insertedId" : 2 }
+> show collections
+products
+> db.products.find()
+{ "_id" : 1, "name" : "pen", "price" : 1.2 }
+{ "_id" : 2, "name" : "pencil", "price" : 12 }
+> db.products.find({name: "pencil"})
+{ "_id" : 2, "name" : "pencil", "price" : 12 }
+> db.products.find({price:{5gt: 1}})
+uncaught exception: SyntaxError: identifier starts immediately after numeric literal :
+@(shell):1:25
+> db.products.find({_id: 1})
+{ "_id" : 1, "name" : "pen", "price" : 1.2 }
+> db.products.find({_id: 1},{name: 1, _id: 0})
+{ "name" : "pen" }
+> db.products.updateOne({_id:2}, {$set: {stock:12}})
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+> db.products.updateOne({_id:1}, {$set: {stock:14}})
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+> db.products.find()
+{ "_id" : 1, "name" : "pen", "price" : 1.2, "stock" : 14 }
+{ "_id" : 2, "name" : "pencil", "price" : 12, "stock" : 12 }
+> db.products.deleteOne({_id:2})
+{ "acknowledged" : true, "deletedCount" : 1 }
+> db.products.find()
+{ "_id" : 1, "name" : "pen", "price" : 1.2, "stock" : 14 }
+> db.products.insert({_id: 2, name:"pencil"})
+Wrdb.products.insert({_id: 2, name: "pencil", price: 12, stock: 14})db.products.insert({_id: 2, name: "pencil", price: 12, stock: })
+WriteResult({
+        "nInserted" : 0,
+        "writeError" : {
+                "code" : 11000,
+                "errmsg" : "E11000 duplicate key error collection: shopDB.products index: _id_ dup key: { _id: 2.0 }"
+        }
+})
+> db.products.find()
+{ "_id" : 1, "name" : "pen", "price" : 1.2, "stock" : 14 }
+{ "_id" : 2, "name" : "pencil" }
+> db.products.insertOne({
+... _id:3,
+... name: "marker",
+... price: 0.80,
+... stock:12,
+... review: [
+... {
+... authorName: "jame",
+... rating: 5,
+... review: "Fantastic"
+...
+... }
+... ]
+... })
+{ "acknowledged" : true, "insertedId" : 3 }
+> db.products.find()
+{ "_id" : 1, "name" : "pen", "price" : 1.2, "stock" : 14 }
+{ "_id" : 2, "name" : "pencil" }
+{ "_id" : 3, "name" : "marker", "price" : 0.8, "stock" : 12, "review" : [ { "authorName" : "jame", "rating" : 5, "review" : "Fantastic" } ] }
+>
